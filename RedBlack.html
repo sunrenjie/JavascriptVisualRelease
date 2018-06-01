@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <title>
         Red/Black Tree Visualization
     </title>
+    <meta charset="utf-8">
 
     <!-- css sheet for how the page is laid out -->
-
     <link rel="stylesheet" href="visualizationPageStyle.css">
 
-
     <!-- jqueury stuff.  Only used for the animation speed slider. -->
-    <link rel="stylesheet" href="ThirdParty/jquery-ui-1.8.11.custom.css">
-    <script src="ThirdParty/jquery-1.5.2.min.js"></script>
-    <script src="ThirdParty/jquery-ui-1.8.11.custom.min.js"></script>
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css">
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
 
     <!-- Javascript for the actual visualization code -->
     <script type="text/javascript" src="AnimationLibrary/CustomEvents.js"></script>
@@ -31,7 +29,6 @@
 
     <script type="text/javascript" src="AlgorithmLibrary/Algorithm.js"></script>
     <script type="text/javascript" src="AlgorithmLibrary/RedBlack.js"></script>
-
 </head>
 
 <body onload="init();" class="VisualizationMainPage">
@@ -45,8 +42,9 @@
     <div id="mainContent">
 
         <div id="algoControlSection">
+            <input type="button" id="btn-batch-process" value="Run Batch Code"/>
             <!-- Table for buttons to control specific animation (insert/find/etc) -->
-            <!-- (filled in by javascript code specific to the animtion) -->
+            <!-- (filled in by javascript code specific to the animation) -->
             <table id="AlgorithmSpecificControls"></table>
         </div>
 
@@ -61,12 +59,62 @@
             <table id="GeneralAnimationControls"></table>
         </div>
 
+        <div id="dialog-form" title="Run Batch Code">
+
+            <form>
+                <label for="ta-batch-code">Paste the batch code in the text-area below:</label>
+                <textarea name="code" id="ta-batch-code" style="width: 100%; height: 200px; font-family:monospace;"></textarea>
+
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </form>
+        </div>
     </div> <!-- mainContent -->
 
     <div id="footer">
         <p><a href="Algorithms.html">Algorithm Visualizations</a></p>
     </div>
 
+    <script type="text/javascript">
+        $(function () {
+            var dialog, form;
+
+            function runBatchCode() {
+                // TODO set $('#btn-batch-process')[0].disabled = true; also, a reliable way to re-enable it in spite of errors.
+                let v = $("#ta-batch-code")[0].value; // be sure to fetch the value in advance, before the form is reset.
+                setTimeout(function () {
+                    currentAlg.runBatchCode(v);
+                }, 500);
+                dialog.dialog("close"); // will reset the form;
+                return true;
+            }
+
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 400,
+                width: 600,
+                modal: true,
+                buttons: {
+                    "Run the code": runBatchCode,
+                    Cancel: function () {
+                        dialog.dialog("close");
+                    }
+                },
+                close: function () {
+                    form[0].reset();
+                }
+            });
+
+            form = dialog.find("form").on("submit", function (event) {
+                event.preventDefault();
+                runBatchCode();
+            });
+
+            $("#btn-batch-process").button().on("click", function () {
+                dialog.dialog("open");
+            });
+        });
+    </script>
 </div><!-- container -->
 
 </body>

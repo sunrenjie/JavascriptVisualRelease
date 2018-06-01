@@ -175,6 +175,12 @@ Algorithm.prototype.implementAction = function (funct, val) {
     this.animationManager.StartNewAnimation(retVal);
 }
 
+Algorithm.prototype.implementActionWithCallback = function (funct, val, callback) {
+    var nxt = [funct, val];
+    this.actionHistory.push(nxt);
+    var retVal = funct(val);
+    this.animationManager.StartNewAnimationWithCallback(retVal, callback);
+};
 
 Algorithm.prototype.isAllDigits = function (str) {
     for (var i = str.length - 1; i >= 0; i--) {

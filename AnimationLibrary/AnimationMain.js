@@ -29,6 +29,7 @@
 var timer;
 var swapped = false;
 
+var animationEndCallback = null;
 
 function reorderSibling(node1, node2) {
     node1.parentNode.replaceChild(node1, node2);
@@ -509,6 +510,12 @@ function AnimationManager(objectManager) {
             this.animatedObjects.update();
             this.animatedObjects.draw();
 
+            // Now the animation is done and the caller in timeout() will call objectManager.draw().
+            // We will run the callback after that is done.
+            if (animationEndCallback != null) {
+                setTimeout(animationEndCallback, 10);
+                animationEndCallback = null;
+            }
             return;
         }
         this.undoAnimationStepIndices.push(this.currentAnimation);
@@ -905,6 +912,11 @@ function AnimationManager(objectManager) {
         timer = setTimeout('timeout()', 30);
 
     }
+
+    this.StartNewAnimationWithCallback = function (commands, callback) {
+        animationEndCallback = callback;
+        this.StartNewAnimation(commands);
+    };
 
 
     // Step backwards one step.  A no-op if the animation is not currently paused

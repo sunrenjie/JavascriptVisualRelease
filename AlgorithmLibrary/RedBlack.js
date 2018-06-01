@@ -140,6 +140,51 @@ RedBlack.prototype.findCallback = function (event) {
     }
 };
 
+RedBlack.prototype.runBatchCode = function (batchCode) {
+    if (batchCode == null) {
+        return;
+    }
+    let lines = batchCode.split("\n");
+    let i = 0;
+    const parent = this;
+    let fetchNextOneAndExecute = function () {
+        while (i < lines.length) { // skip ineffective lines: empty, comments (with an initial '#')
+            s = lines[i].trim();
+            if (s === "" || s === '#') {
+                i++;
+            } else {
+                break;
+            }
+        }
+        if (i === lines.length) { // finally, all the batch code is done
+            batchCode = ""; // clear the input
+            return;
+        }
+        const d = lines[i].trim().split(" ");
+        if (d.length !== 2) {
+            alert("Unrecognized code line: '" + lines[i] + "'");
+            return;
+        }
+        let operator = d[0].toLowerCase();
+        let operand = parent.normalizeNumber(d[1], 4);
+        let e = null;
+        if (operator === "insert") {
+            e = parent.insertElement;
+        } else if (operator === "delete") {
+            e = parent.deleteElement;
+        } else if (operator === "find") {
+            e = parent.findElement;
+        }
+        if (e == null) {
+            alert("Unrecognized operator in line: '" + lines[i] + "'");
+            return;
+        }
+        i++;
+        parent.implementActionWithCallback(e.bind(parent), operand, fetchNextOneAndExecute);
+    };
+    fetchNextOneAndExecute();
+};
+
 RedBlack.prototype.printCallback = function (event) {
     this.implementAction(this.printTree.bind(this), "");
 };
