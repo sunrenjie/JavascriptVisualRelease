@@ -25,84 +25,79 @@
 // or implied, of the University of San Francisco
 
 
-
-function MyAlgorithm(am, w, h)
-{
-	this.init(am, w, h);
+function MyAlgorithm(am, w, h) {
+    this.init(am, w, h);
 }
 
 MyAlgorithm.prototype = new Algorithm();
 MyAlgorithm.prototype.constructor = MyAlgorithm;
 MyAlgorithm.superclass = Algorithm.prototype;
 
-MyAlgorithm.prototype.init = function(am, w, h)
-{
-	// Call the unit function of our "superclass", which adds a couple of
-	// listeners, and sets up the undo stack
-	MyAlgorithm.superclass.init.call(this, am, w, h);
-	
-	this.addControls();
-	
-	// Useful for memory management
-	this.nextIndex = 0;
+MyAlgorithm.prototype.init = function (am, w, h) {
+    // Call the unit function of our "superclass", which adds a couple of
+    // listeners, and sets up the undo stack
+    MyAlgorithm.superclass.init.call(this, am, w, h);
 
-	// TODO:  Add any code necessary to set up your own algorithm.  Initialize data
-	// structures, etc.
-	
+    this.addControls();
+
+    // Useful for memory management
+    this.nextIndex = 0;
+
+    // TODO:  Add any code necessary to set up your own algorithm.  Initialize data
+    // structures, etc.
+
 }
 
-MyAlgorithm.prototype.addControls =  function()
-{
-	this.controls = [];
-	
-	// Add any necessary controls for your algorithm.
-	//   There are libraries that help with text entry, buttons, check boxes, radio groups
-	//
-	// To add a button myButton:
-	//	   this.mybytton = addControlToAlgorithmBar("Button", "MyButtonText");
-	//     this.mybytton.onclick = this.myCallback.bind(this);
-	//     this.controls.push(this.mybutton);
-	//   where myCallback is a method on this function that implemnts the callback
-	//
-	// To add a text field myField:
-	//    this.myField = addControlToAlgorithmBar("Text", "");
-	//    this.myField.onkeydown = this.returnSubmit(this.myField,  
-	//                                               this.anotherCallback.bind(this), // callback to make when return is pressed
-	//                                               maxFieldLen,                     // integer, max number of characters allowed in field
-	//                                               intOnly);                        // boolean, true of only digits can be entered.
-	//    this.controls.push(this.myField);
-	//
+MyAlgorithm.prototype.addControls = function () {
+    this.controls = [];
+
+    // Add any necessary controls for your algorithm.
+    //   There are libraries that help with text entry, buttons, check boxes, radio groups
+    //
+    // To add a button myButton:
+    //	   this.mybytton = addControlToAlgorithmBar("Button", "MyButtonText");
+    //     this.mybytton.onclick = this.myCallback.bind(this);
+    //     this.controls.push(this.mybutton);
+    //   where myCallback is a method on this function that implemnts the callback
+    //
+    // To add a text field myField:
+    //    this.myField = addControlToAlgorithmBar("Text", "");
+    //    this.myField.onkeydown = this.returnSubmit(this.myField,
+    //                                               this.anotherCallback.bind(this), // callback to make when return is pressed
+    //                                               maxFieldLen,                     // integer, max number of characters allowed in field
+    //                                               intOnly);                        // boolean, true of only digits can be entered.
+    //    this.controls.push(this.myField);
+    //
     // To add a textbox:
-	//   	this.myCheckbox = addCheckboxToAlgorithmBar("Checkbox Label");
-	//      this.myCheckbox.onclick = this.checkboxCallback.bind(this);
-	//      this.controls.push(myCheckbox);
-	//
-	// To add a radio button group:
-	//	  this.radioButtonList = addRadioButtonGroupToAlgorithmBar(["radio button label 1", 
-	//                                                              "radio button label 2", 
-	//                                                              "radio button label 3"], 
+    //   	this.myCheckbox = addCheckboxToAlgorithmBar("Checkbox Label");
+    //      this.myCheckbox.onclick = this.checkboxCallback.bind(this);
+    //      this.controls.push(myCheckbox);
+    //
+    // To add a radio button group:
+    //	  this.radioButtonList = addRadioButtonGroupToAlgorithmBar(["radio button label 1",
+    //                                                              "radio button label 2",
+    //                                                              "radio button label 3"],
     //                                                             "MyButtonGroupName");
-	//    this.radioButtonList[0].onclick = this.firstRadioButtonCallback.bind(this);
-	//    this.controls.push(this.radioButtonList[0]);
-	//    this.radioButtonList[1].onclick = this.secondRadioButtonCallback.bind(this);
-	//    this.controls.push(this.radioButtonList[1]);
-	//    this.radioButtonList[2].onclick = this.thirdRadioButtonCallback.bind(this);
-	//    this.controls.push(this.radioButtonList[1]);
-	//
-	// Note that we are adding the controls to the controls array so that they can be enabled / disabled
-	// by the animation manager (see enableUI / disableUI below)
+    //    this.radioButtonList[0].onclick = this.firstRadioButtonCallback.bind(this);
+    //    this.controls.push(this.radioButtonList[0]);
+    //    this.radioButtonList[1].onclick = this.secondRadioButtonCallback.bind(this);
+    //    this.controls.push(this.radioButtonList[1]);
+    //    this.radioButtonList[2].onclick = this.thirdRadioButtonCallback.bind(this);
+    //    this.controls.push(this.radioButtonList[1]);
+    //
+    // Note that we are adding the controls to the controls array so that they can be enabled / disabled
+    // by the animation manager (see enableUI / disableUI below)
 }
 
-MyAlgorithm.prototype.reset = function()
-{
-	// Reset all of your data structures to *exactly* the state they have immediately after the init
-	// function is called.  This method is called whenever an "undo" is performed.  Your data
-	// structures are completely cleaned, and then all of the actions *up to but not including* the
-	// last action are then redone.  If you implement all of your actions through the "implementAction"
-	// method below, then all of this work is done for you in the Animation "superclass"
-	
-	// Reset the (very simple) memory manager
-	this.nextIndex = 0;
+MyAlgorithm.prototype.reset = function () {
+    // Reset all of your data structures to *exactly* the state they have immediately after the init
+    // function is called.  This method is called whenever an "undo" is performed.  Your data
+    // structures are completely cleaned, and then all of the actions *up to but not including* the
+    // last action are then redone.  If you implement all of your actions through the "implementAction"
+    // method below, then all of this work is done for you in the Animation "superclass"
+
+    // Reset the (very simple) memory manager
+    this.nextIndex = 0;
 
 }
 
@@ -175,33 +170,27 @@ MyAlgorithm.prototype.reset = function()
 //}
 
 
-
 // Called by our superclass when we get an animation started event -- need to wait for the
 // event to finish before we start doing anything
-MyAlgorithm.prototype.disableUI = function(event)
-{
-	for (var i = 0; i < this.controls.length; i++)
-	{
-		this.controls[i].disabled = true;
-	}
+MyAlgorithm.prototype.disableUI = function (event) {
+    for (var i = 0; i < this.controls.length; i++) {
+        this.controls[i].disabled = true;
+    }
 }
 
 // Called by our superclass when we get an animation completed event -- we can
 /// now interact again.
-MyAlgorithm.prototype.enableUI = function(event)
-{
-	for (var i = 0; i < this.controls.length; i++)
-	{
-		this.controls[i].disabled = false;
-	}
+MyAlgorithm.prototype.enableUI = function (event) {
+    for (var i = 0; i < this.controls.length; i++) {
+        this.controls[i].disabled = false;
+    }
 }
 
 
 var currentAlg;
 
-function init()
-{
-	var animManag = initCanvas();
-	currentAlg = new MyAlgorithm(animManag, canvas.width, canvas.height);
-	
+function init() {
+    var animManag = initCanvas();
+    currentAlg = new MyAlgorithm(animManag, canvas.width, canvas.height);
+
 }
